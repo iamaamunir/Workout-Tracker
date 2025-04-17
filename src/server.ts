@@ -1,9 +1,7 @@
 import "reflect-metadata";
-import express from "express";
-import { AppDataSource } from "../src/data-source";
+import app from "./app";
 
-const app = express();
-app.use(express.json());
+import { AppDataSource } from "../src/data-source";
 
 AppDataSource.initialize()
   .then(() => {
