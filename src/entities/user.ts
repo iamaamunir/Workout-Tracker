@@ -51,3 +51,13 @@ export interface UserResponseDto {
   createdAt?: Date | undefined;
   updatedAt?: Date | undefined;
 }
+
+export interface UserLoginDto {
+  password: string;
+  email: string;
+}
+
+export interface loginResponseDto {
+  accessToken: string;
+  refreshToken: string;
+}

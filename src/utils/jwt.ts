@@ -1,19 +1,14 @@
 import { SignOptions } from "jsonwebtoken";
 import * as Jwt from "jsonwebtoken";
 import * as dotenv from "dotenv";
-import { UserDto } from "../dtos/auth.dto";
+import { UserResponseDto } from "../entities/user";
 
 dotenv.config();
 
-// export interface UserPayload {
-//   id: string;
-//   email: string;
-//   firstname: string;
-//   lastname: string
-// }
-
 export class jwtTokens {
-  static async generateAccessToken(userPayload: UserDto): Promise<string> {
+  static async generateAccessToken(
+    userPayload: UserResponseDto
+  ): Promise<string> {
     const expiresIn = process.env.ACCESS_TOKEN_EXPIRES_IN;
     const options: SignOptions = {
       expiresIn: Number(expiresIn),
@@ -27,7 +22,9 @@ export class jwtTokens {
     return accessToken;
   }
 
-  static async generateRefreshToken(userPayload: UserDto): Promise<string> {
+  static async generateRefreshToken(
+    userPayload: UserResponseDto
+  ): Promise<string> {
     const expiresIn = process.env.REFRESH_TOKEN_EXPIRES_IN;
     const options: SignOptions = {
       expiresIn: Number(expiresIn),
@@ -41,12 +38,12 @@ export class jwtTokens {
     return refreshToken;
   }
 
-  static async verifyToken(token: string): Promise<UserDto | null> {
+  static async verifyToken(token: string): Promise<UserResponseDto | null> {
     try {
       const decoded = Jwt.verify(
         token,
         process.env.TOKEN_SECRET as string
-      ) as UserDto;
+      ) as UserResponseDto;
       return decoded;
     } catch (error) {
       console.error("Token verification failed:", error);
