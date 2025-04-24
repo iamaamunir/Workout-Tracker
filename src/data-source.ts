@@ -7,12 +7,10 @@ import { User } from "./entities/user";
 
 export const AppDataSource = new DataSource({
   type: "postgres",
-  host: process.env.DB_HOST,
-  port: parseInt(process.env.DB_PORT || "5432"),
-  username: process.env.DB_USERNAME,
-  password: process.env.DB_PASSWORD,
-  database: process.env.DB_DATABASE,
+  url: process.env.DB_URL,
   entities: [User],
-  synchronize: true, // set to false in production
+  synchronize: true,
   logging: true,
 });
+
+console.log(AppDataSource);

@@ -24,17 +24,30 @@ export class User {
   @Column({ nullable: false, type: "varchar" })
   password!: string;
 
-  @Column({ nullable: false, type: "varchar" })
-  confirmPassword!: string;
+  @Column({ type: "boolean", default: true })
+  isActive = true;
 
-  @Column({ nullable: true, type: "varchar" })
+  // @Column({ type: "varchar" })
+  // confirmPassword!: string;
+
+  @Column({ nullable: false, type: "varchar" })
   phone?: string;
 
-  @Column({ nullable: true, type: "varchar" })
+  @Column({ nullable: false, type: "varchar" })
   country?: string;
   @CreateDateColumn()
   createdAt?: Date;
 
   @UpdateDateColumn()
   updatedAt?: Date;
+}
+
+export interface UserResponseDto {
+  id: string;
+  email: string;
+  firstname: string;
+  lastname: string;
+  country?: string;
+  createdAt?: Date | undefined;
+  updatedAt?: Date | undefined;
 }
