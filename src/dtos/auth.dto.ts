@@ -53,6 +53,17 @@ export const CreateUserSchema = z
     path: ["confirmPassword"],
   });
 
+export const LoginUserSchema = z.object({
+  email: z
+    .string()
+    .email({ message: "Please enter a valid email address" })
+    .trim(),
+  password: z
+    .string()
+    .min(8, { message: "Password must be at least 8 characters long" }),
+});
+
 // export type UserDto = z.infer<typeof UserSchema>;
 export type CreateUserDto = z.infer<typeof CreateUserSchema>;
+export type LoginUserDto = z.infer<typeof LoginUserSchema>;
 export type UserCreationDto = Omit<CreateUserDto, "confirmPassword">;

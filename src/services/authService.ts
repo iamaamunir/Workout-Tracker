@@ -51,6 +51,7 @@ export class authService {
       if (!isUser) {
         throw new AppError("Invalid credentials", 404, true, "Not found");
       }
+
       const isPasswordVerified = await encrypt.comparePassword(
         payload.password,
         isUser.password
@@ -58,11 +59,19 @@ export class authService {
       if (!isPasswordVerified) {
         throw new AppError("Invalid credentials", 401, true, "Not found");
       }
+
       let accessToken: string;
       let refreshToken: string;
+
       try {
-        accessToken = await jwtTokens.generateAccessToken(isUser);
-        refreshToken = await jwtTokens.generateRefreshToken(isUser);
+        accessToken = await jwtTokens.generateAccessToken({
+          id: isUser.id,
+          email: isUser.email,
+        });
+        refreshToken = await jwtTokens.generateRefreshToken({
+          id: isUser.id,
+          email: isUser.email,
+        });
       } catch (error) {
         throw new AppError(
           "Failed to generate token",
@@ -71,9 +80,9 @@ export class authService {
           "token_error"
         );
       }
+      encrypt.hashRefreshToken(refreshToken, isUser);
       return { accessToken: accessToken, refreshToken: refreshToken };
     } catch (error) {
-      console.error(error);
       if (!(error instanceof AppError)) {
         console.error("Error trying to login");
         throw new AppError("Internal server error", 500, false, "error");

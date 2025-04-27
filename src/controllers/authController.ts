@@ -1,6 +1,6 @@
 import { Response, Request, NextFunction } from "express";
 import { authService } from "../services/authService";
-import { CreateUserSchema } from "../dtos/auth.dto";
+import { CreateUserSchema, LoginUserSchema } from "../dtos/auth.dto";
 import { AppError } from "../utils/appError";
 import { ResponseHandler } from "../utils/response";
 
@@ -31,4 +31,23 @@ export class authController {
     }
   }
 
+  static async login(req: Request, res: Response, next: NextFunction) {
+    try {
+      const validateData = LoginUserSchema.parse(req.body);
+      if (!validateData) {
+        throw new AppError("Validation failed", 422, true, "validation_error");
+      }
+      const tokens = await authService.loginUser(validateData);
+      const response = new ResponseHandler(
+        tokens,
+        "Login successful",
+        200,
+        null,
+        "success"
+      );
+      response.send(res);
+    } catch (error) {
+      next(error);
+    }
+  }
 }

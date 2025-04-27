@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import { AppError } from "../utils/appError";
 import * as dotenv from "dotenv";
+import { error } from "console";
 dotenv.config();
 
 export const errorHandler = (
@@ -13,6 +14,7 @@ export const errorHandler = (
   const status = statusCode >= 400 && statusCode < 500 ? "fail" : "error";
 
   if (process.env.NODE_ENV === "development") {
+    console.error(err);
     return res.status(statusCode).json({
       status: status,
       message: err.message,

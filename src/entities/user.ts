@@ -27,8 +27,8 @@ export class User {
   @Column({ type: "boolean", default: true })
   isActive = true;
 
-  // @Column({ type: "varchar" })
-  // confirmPassword!: string;
+  @Column({ type: "varchar", nullable: true, array: true })
+  refreshToken?: string[];
 
   @Column({ nullable: false, type: "varchar" })
   phone?: string;

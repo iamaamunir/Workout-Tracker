@@ -1,49 +1,68 @@
-import { SignOptions } from "jsonwebtoken";
-import * as Jwt from "jsonwebtoken";
+import jwt, { SignOptions } from "jsonwebtoken";
+import { StringValue } from "ms";
 import * as dotenv from "dotenv";
 import { UserResponseDto } from "../entities/user";
 
 dotenv.config();
 
 export class jwtTokens {
-  static async generateAccessToken(
-    userPayload: UserResponseDto
-  ): Promise<string> {
-    const expiresIn = process.env.ACCESS_TOKEN_EXPIRES_IN;
-    const options: SignOptions = {
-      expiresIn: Number(expiresIn),
-    };
+  static async generateAccessToken({
+    id,
+    email,
+  }: {
+    id: string;
+    email: string;
+  }): Promise<string> {
+    const secret = process.env.TOKEN_SECRET;
 
-    const accessToken = Jwt.sign(
-      { id: userPayload.id, email: userPayload.email },
-      process.env.TOKEN_SECRET as string,
-      options
-    );
-    return accessToken;
+    const expiresIn = process.env.ACCESS_TOKEN_EXPIRES_IN;
+    //FIXME: USE APPERROR HERE TO HANDLE THIS PROPERLY
+    if (!secret) throw new Error("TOKEN_SECRET is not defined"); 
+
+    const options: SignOptions = {
+      expiresIn: expiresIn as StringValue,
+    };
+    console.log("Options prepared:", JSON.stringify(options));
+
+    console.log("About to sign JWT");
+    try {
+      const accessToken = jwt.sign({ id, email }, secret, options);
+      console.log("JWT signed successfully");
+      return accessToken;
+    } catch (error) {
+      console.error("JWT signing failed:", error);
+      throw error;
+    }
   }
 
-  static async generateRefreshToken(
-    userPayload: UserResponseDto
-  ): Promise<string> {
+  static async generateRefreshToken({
+    id,
+    email,
+  }: {
+    id: string;
+    email: string;
+  }): Promise<string> {
     const expiresIn = process.env.REFRESH_TOKEN_EXPIRES_IN;
+    const secret = process.env.TOKEN_SECRET;
+    //FIXME: USE APPERROR HERE TO HANDLE THIS PROPERLY
+    if (!secret) throw new Error("TOKEN_SECRET is not defined");
+
     const options: SignOptions = {
-      expiresIn: Number(expiresIn),
+      expiresIn: expiresIn as StringValue,
     };
 
-    const refreshToken = Jwt.sign(
-      { id: userPayload.id, email: userPayload.email },
-      process.env.TOKEN_SECRET as string,
-      options
-    );
+    const refreshToken = jwt.sign({ id, email }, secret, options);
     return refreshToken;
   }
 
-  static async verifyToken(token: string): Promise<UserResponseDto | null> {
+  static async verifyToken(
+    token: string
+  ): Promise<{ id: string; email: string } | null> {
     try {
-      const decoded = Jwt.verify(
-        token,
-        process.env.TOKEN_SECRET as string
-      ) as UserResponseDto;
+      const decoded = jwt.verify(token, process.env.TOKEN_SECRET as string) as {
+        id: string;
+        email: string;
+      };
       return decoded;
     } catch (error) {
       console.error("Token verification failed:", error);
