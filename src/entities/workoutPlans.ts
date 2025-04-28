@@ -34,7 +34,7 @@ export class WorkoutPlans {
   @Column({ type: "boolean", default: false, nullable: true })
   is_public?: boolean;
 
-  @OneToOne(() => User, (user) => user.id)
+  @OneToOne(() => User, (user) => user.workoutPlans)
   user?: User;
 
   @OneToMany(

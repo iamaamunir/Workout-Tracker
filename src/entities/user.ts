@@ -5,7 +5,9 @@ import {
   Entity,
   CreateDateColumn,
   UpdateDateColumn,
+  OneToMany,
 } from "typeorm";
+import { WorkoutPlans } from "./workoutPlans";
 
 @Entity()
 export class User {
@@ -35,6 +37,10 @@ export class User {
 
   @Column({ nullable: false, type: "varchar" })
   country?: string;
+
+  @OneToMany(() => WorkoutPlans, (workoutPlans) => workoutPlans.user)
+  workoutPlans?: WorkoutPlans;
+
   @CreateDateColumn()
   createdAt?: Date;
 
