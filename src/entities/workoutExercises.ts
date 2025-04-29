@@ -4,46 +4,46 @@ import {
   PrimaryGeneratedColumn,
   CreateDateColumn,
   UpdateDateColumn,
-  OneToOne,
-  ManyToMany,
   ManyToOne,
+  Relation,
 } from "typeorm";
-import { Exercise } from "./exercises";
-import { WorkoutPlans } from "./workoutPlans";
-import { number } from "zod";
+import { Exercise } from "./exercises.ts";
+import { WorkoutPlans } from "./workoutPlans.ts";
 
 @Entity()
 export class WorkoutExercise {
   @PrimaryGeneratedColumn("uuid")
-  id!: string;
+  readonly id!: string;
 
-  @Column({ type: "number", nullable: false })
+  @Column({ type: "int" })
   sets!: number;
 
-  @Column({ type: "number", nullable: false })
+  @Column({ type: "int" })
   reps!: number;
 
-  @Column({ type: "number", nullable: true })
+  @Column({ type: "int", nullable: true })
   duration?: number;
 
   @Column({ type: "varchar", nullable: true })
   notes?: string;
 
   @CreateDateColumn()
-  createdAt!: Date;
+  readonly createdAt!: Date;
 
   @UpdateDateColumn()
-  updatedAt?: Date;
+  readonly updatedAt!: Date;
 
-  @ManyToMany(() => Exercise, (exercise) => exercise.workoutExercise, {
+  @ManyToOne(() => Exercise, (exercise) => exercise.workoutExercise, {
     onDelete: "CASCADE",
   })
-  exercise?: Exercise;
+  exercise!: Relation<Exercise>;
 
   @ManyToOne(
     () => WorkoutPlans,
     (workoutPlans) => workoutPlans.workoutExercise,
-    { onDelete: "CASCADE" }
+    {
+      onDelete: "CASCADE",
+    }
   )
-  workoutPlans?: WorkoutPlans;
+  workoutPlans!: Relation<WorkoutPlans>;
 }

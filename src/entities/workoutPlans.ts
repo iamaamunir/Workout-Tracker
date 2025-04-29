@@ -4,12 +4,13 @@ import {
   PrimaryGeneratedColumn,
   CreateDateColumn,
   UpdateDateColumn,
-  OneToOne,
+  ManyToOne,
   OneToMany,
+  Relation,
 } from "typeorm";
-import { User } from "./user";
-import { WorkoutExercise } from "./workoutExercises";
-import { Difficulty } from "../types/exercises";
+import { User } from "./user.ts";
+import { WorkoutExercise } from "./workoutExercises.ts";
+import { Difficulty } from "../types/exercises.ts";
 
 @Entity()
 export class WorkoutPlans {
@@ -25,7 +26,7 @@ export class WorkoutPlans {
   @Column({ type: "varchar", nullable: true })
   goal?: string;
 
-  @Column({ type: "number", nullable: true })
+  @Column({ type: "int", nullable: true })
   duration_in_weeks?: number;
 
   @Column({ type: "enum", enum: Difficulty, default: Difficulty.BEGINNER })
@@ -34,14 +35,14 @@ export class WorkoutPlans {
   @Column({ type: "boolean", default: false, nullable: true })
   is_public?: boolean;
 
-  @OneToOne(() => User, (user) => user.workoutPlans)
-  user?: User;
+  @ManyToOne(() => User, (user) => user.workoutPlans)
+  user?: Relation<User>;
 
   @OneToMany(
     () => WorkoutExercise,
     (workoutExercise) => workoutExercise.workoutPlans
   )
-  workoutExercise?: WorkoutExercise;
+  workoutExercise?: Relation<WorkoutExercise[]>;
 
   @CreateDateColumn()
   createdAt!: Date;

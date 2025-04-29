@@ -6,8 +6,9 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   OneToMany,
+  Relation,
 } from "typeorm";
-import { WorkoutPlans } from "./workoutPlans";
+import { WorkoutPlans } from "./workoutPlans.ts";
 
 @Entity()
 export class User {
@@ -39,7 +40,7 @@ export class User {
   country?: string;
 
   @OneToMany(() => WorkoutPlans, (workoutPlans) => workoutPlans.user)
-  workoutPlans?: WorkoutPlans;
+  workoutPlans?: Relation<WorkoutPlans[]>;
 
   @CreateDateColumn()
   createdAt?: Date;
@@ -59,8 +60,8 @@ export interface UserResponseDto {
 }
 
 export interface UserLoginDto {
-  password: string;
-  email: string;
+  password?: string;
+  email?: string;
 }
 
 export interface loginResponseDto {

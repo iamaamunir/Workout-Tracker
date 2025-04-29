@@ -1,10 +1,10 @@
 import { Request as ExpressRequest, Response, NextFunction } from "express";
-import { UserDto } from "../dtos/auth.dto";
+import { CreateUserDto } from "../dtos/auth.dto";
 
 declare global {
   namespace Express {
     interface Request {
-      user?: UserDto;
+      user?: { id: string; email: string };
     }
   }
 }

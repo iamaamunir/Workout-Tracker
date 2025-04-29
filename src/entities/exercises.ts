@@ -5,9 +5,10 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   OneToMany,
+  Relation,
 } from "typeorm";
-import { WorkoutExercise } from "./workoutExercises";
-import { Difficulty } from "../types/exercises";
+import { WorkoutExercise } from "./workoutExercises.ts";
+import { Difficulty } from "../types/exercises.ts";
 
 @Entity()
 export class Exercise {
@@ -26,18 +27,25 @@ export class Exercise {
   @Column({ type: "enum", enum: Difficulty, default: Difficulty.BEGINNER })
   difficulty?: Difficulty;
 
-  @Column({ type: "number", nullable: true })
+  @Column({ type: "int", nullable: true })
   duration?: number;
 
-  @Column({ type: "number", nullable: true })
+  @Column({ type: "int", nullable: true })
   calorie_burned?: number;
 
   @Column({ type: "varchar", nullable: true })
   media_url?: string;
 
-  @OneToMany(() => WorkoutExercise, (workoutExercise) => workoutExercise.exercise)
-  workoutExercise?: WorkoutExercise;
-
+  // @OneToMany(
+  //   () => WorkoutExercise,
+  //   (workoutExercise) => workoutExercise.exercise
+  // )
+  // workoutExercise?: WorkoutExercise;
+  @OneToMany(
+    () => WorkoutExercise,
+    (workoutExercise) => workoutExercise.exercise
+  )
+  workoutExercise?: Relation<WorkoutExercise[]>;
   @CreateDateColumn()
   createdAt!: Date;
 
