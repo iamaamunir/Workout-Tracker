@@ -1,28 +1,28 @@
 import { Response, Request, NextFunction } from "express";
+import jwt from "jsonwebtoken";
 import { jwtTokens } from "../utils/jwt";
+import { AppError } from "../utils/appError";
 import "../types/custom-request";
 export const authMiddleware = async (
-  res: Response,
   req: Request,
+  res: Response,
   next: NextFunction
-) => {
+): Promise<void | any> => {
   const token: string | undefined = req.headers["authorization"]?.split(" ")[1];
   if (!token) {
-    // TODO: Proper error handling
-    return res.status(401).json({ message: "Unauthorized" });
+    throw new AppError("Token missing", 404, true, "Not found");
   }
 
   try {
     const decoded = await jwtTokens.verifyToken(token);
+    // console.log(decoded);
     if (!decoded) {
-      return res.status(403).json({ message: "Forbidden" });
+      throw new AppError("Token Error", 403, true, "Forbidden");
     }
 
     req.user = decoded;
     next();
   } catch (error) {
-    // TODO: Proper error handling
-    console.error("Token verification error:", error);
-    return res.status(403).json({ message: "Forbidden" });
+    next(error);
   }
 };

@@ -52,3 +52,17 @@ export class Exercise {
   @UpdateDateColumn()
   updatedAt?: Date;
 }
+
+export interface ExerciseResponseDto {
+  id: string;
+  name: string;
+  difficulty?: Difficulty;
+  duration?: number;
+  calorie_burned?: number;
+  media_url?: string;
+  createdAt: Date;
+  updatedAt?: Date;
+}
+export interface ExerciseListResponseDto {
+  exercises: ExerciseResponseDto[]; 
+}
