@@ -18,6 +18,9 @@ export class authController {
       }
       const { confirmPassword, ...userData } = validateData;
       const newUser = await authService.registerUser(userData);
+      if (!newUser) {
+        throw new AppError("Failed to create user", 500, false, "error");
+      }
       const response = new ResponseHandler(
         newUser,
         "User created successfully",

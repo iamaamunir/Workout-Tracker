@@ -1,4 +1,3 @@
-import "reflect-metadata";
 import {
   PrimaryGeneratedColumn,
   Column,
@@ -9,6 +8,7 @@ import {
   Relation,
 } from "typeorm";
 import { WorkoutPlans } from "./workoutPlans.ts";
+import { Role } from "../types/user.ts";
 
 @Entity()
 export class User {
@@ -34,10 +34,13 @@ export class User {
   refreshToken?: string[];
 
   @Column({ nullable: false, type: "varchar" })
-  phone?: string;
+  phone!: string;
 
   @Column({ nullable: false, type: "varchar" })
-  country?: string;
+  country!: string;
+
+  @Column({ type: "enum", enum: Role, default: Role.USER})
+  role?: Role;
 
   @OneToMany(() => WorkoutPlans, (workoutPlans) => workoutPlans.user)
   workoutPlans?: Relation<WorkoutPlans[]>;
@@ -49,22 +52,4 @@ export class User {
   updatedAt?: Date;
 }
 
-export interface UserResponseDto {
-  id: string;
-  email: string;
-  firstname: string;
-  lastname: string;
-  country?: string;
-  createdAt?: Date | undefined;
-  updatedAt?: Date | undefined;
-}
 
-export interface UserLoginDto {
-  password?: string;
-  email?: string;
-}
-
-export interface loginResponseDto {
-  accessToken: string;
-  refreshToken: string;
-}

@@ -1,4 +1,3 @@
-import "reflect-metadata";
 import express, { ErrorRequestHandler } from "express";
 import authRouter from "../src/routes/authRoute";
 import exerciseRouter from "./routes/exerciseRoute";
@@ -10,7 +9,7 @@ app.use(express.json());
 app.get("/", (req, res) => {
   res.status(200).json({
     status: "success",
-    message: "Welcome Workout Tracker",
+    message: "Welcome Fitness Tracker",
   });
 });
 app.use("/api/v1", authRouter);

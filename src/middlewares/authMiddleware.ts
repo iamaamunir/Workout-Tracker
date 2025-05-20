@@ -1,5 +1,4 @@
 import { Response, Request, NextFunction } from "express";
-import jwt from "jsonwebtoken";
 import { jwtTokens } from "../utils/jwt";
 import { AppError } from "../utils/appError";
 import "../types/custom-request";
@@ -15,7 +14,6 @@ export const authMiddleware = async (
 
   try {
     const decoded = await jwtTokens.verifyToken(token);
-    // console.log(decoded);
     if (!decoded) {
       throw new AppError("Token Error", 403, true, "Forbidden");
     }

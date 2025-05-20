@@ -8,5 +8,9 @@ export interface User {
   phone: string;
   address: string;
   createdAt: Date;
-  
+}
+
+export enum Role {
+  USER = "User",
+  ADMIN = "Admin",
 }

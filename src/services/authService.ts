@@ -1,4 +1,3 @@
-import "reflect-metadata";
 import { User } from "../entities/user";
 import { UserCreationDto } from "../dtos/auth.dto";
 import { AppDataSource } from "../data-source";
@@ -8,13 +7,14 @@ import {
   UserResponseDto,
   UserLoginDto,
   loginResponseDto,
-} from "../entities/user";
+} from "../dtos/auth.dto";
 import { jwtTokens } from "../utils/jwt";
+import { Role } from "../types/user";
 
 export class authService {
   static async registerUser(
     payload: UserCreationDto
-  ): Promise<UserResponseDto> {
+  ): Promise<UserResponseDto | void> {
     try {
       const userRepository = AppDataSource.getRepository(User);
       const isUser = await userRepository.findOneBy({ email: payload.email });
@@ -29,6 +29,7 @@ export class authService {
         phone: payload.phone,
         password: hashedPassword,
         country: payload.country,
+        role: payload.role as Role,
         createdAt: new Date(),
       };
 
@@ -51,13 +52,15 @@ export class authService {
       if (!isUser) {
         throw new AppError("Invalid credentials", 404, true, "Not found");
       }
-
-      const isPasswordVerified = await encrypt.comparePassword(
-        payload.password,
-        isUser.password
-      );
+      let isPasswordVerified;
+      if (payload.password) {
+        isPasswordVerified = await encrypt.comparePassword(
+          payload.password,
+          isUser.password
+        );
+      }
       if (!isPasswordVerified) {
-        throw new AppError("Invalid credentials", 401, true, "Not found");
+        throw new AppError("Invalid credentials", 401, true, "Unauthorized");
       }
 
       let accessToken: string;

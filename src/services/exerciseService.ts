@@ -15,7 +15,7 @@ export class exerciseService {
   static async getAllExercise(
     req: any,
     next: any
-  ): Promise<ExerciseResponseDto[]> {
+  ): Promise<ExerciseResponseDto[] | undefined> {
     try {
       const userRepository = AppDataSource.getRepository(User);
       const exerciseRepository = AppDataSource.getRepository(Exercise);

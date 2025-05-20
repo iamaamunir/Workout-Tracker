@@ -1,7 +1,7 @@
 import jwt, { SignOptions } from "jsonwebtoken";
 import { StringValue } from "ms";
 import * as dotenv from "dotenv";
-import { UserResponseDto } from "../entities/user";
+import { UserResponseDto } from "../dtos/auth.dto";
 import { AppError } from "./appError";
 
 dotenv.config();
@@ -17,7 +17,6 @@ export class jwtTokens {
     const secret = process.env.TOKEN_SECRET;
 
     const expiresIn = process.env.ACCESS_TOKEN_EXPIRES_IN;
-    //FIXME: USE APPERROR HERE TO HANDLE THIS PROPERLY
     if (!secret) throw new Error("TOKEN_SECRET is not defined");
 
     const options: SignOptions = {
@@ -45,7 +44,6 @@ export class jwtTokens {
   }): Promise<string> {
     const expiresIn = process.env.REFRESH_TOKEN_EXPIRES_IN;
     const secret = process.env.AUTH_REFRESH_TOKEN_SECRET;
-    //FIXME: USE APPERROR HERE TO HANDLE THIS PROPERLY
     if (!secret) throw new Error("TOKEN_SECRET is not defined");
 
     const options: SignOptions = {
@@ -65,7 +63,7 @@ export class jwtTokens {
         email: string;
       };
       return decoded;
-    } catch (error) {
+    } catch (error: any) {
       if (error.name === "JsonWebTokenError") {
         throw new AppError(
           "Token verfication failed",
@@ -75,12 +73,7 @@ export class jwtTokens {
         );
       }
       if (error.name === "TokenExpiredError") {
-        throw new AppError(
-          "Token Expired",
-          403,
-          true,
-          "Jwt expired"
-        );
+        throw new AppError("Token Expired", 403, true, "Jwt expired");
       }
       console.error("Token verification failed:", error);
       return null;

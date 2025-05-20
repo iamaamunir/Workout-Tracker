@@ -19,8 +19,6 @@ export class ResponseHandler {
     this.meta = meta;
     this.status = status;
   }
-
-  // Method to send the response back to the client
   public send(res: Response): void {
     const responseBody: any = {
       statusCode: this.statusCode,
@@ -31,8 +29,6 @@ export class ResponseHandler {
     if (this.meta) {
       responseBody.meta = this.meta;
     }
-
-    // Send the HTTP response with the status code and JSON body
     res.status(this.statusCode).json(responseBody);
   }
 }
