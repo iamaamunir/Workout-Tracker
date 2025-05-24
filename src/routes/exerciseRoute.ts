@@ -11,4 +11,25 @@ exerciseRouter.get(
   exerciseController.getAllExercise
 );
 
+exerciseRouter.post(
+  "/exercise",
+  authMiddleware,
+  adminMiddleware,
+  exerciseController.createExercise
+);
+
+exerciseRouter.patch(
+  "/exercise/:id",
+  authMiddleware,
+  adminMiddleware,
+  exerciseController.updateExercise
+);
+
+exerciseRouter.delete(
+  "/exercise/:id",
+  authMiddleware,
+  adminMiddleware,
+  exerciseController.deleteExercise
+);
+
 export default exerciseRouter;

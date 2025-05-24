@@ -65,6 +65,7 @@ export class jwtTokens {
       return decoded;
     } catch (error: any) {
       if (error.name === "JsonWebTokenError") {
+        console.log(error);
         throw new AppError(
           "Token verfication failed",
           403,
