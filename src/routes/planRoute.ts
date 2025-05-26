@@ -7,4 +7,9 @@ workoutPlanRouter.post(
   authMiddleware,
   WorkoutPlanController.createPlan
 );
+workoutPlanRouter.patch(
+  "/plan/:id",
+  authMiddleware,
+  WorkoutPlanController.updatePlan
+);
 export default workoutPlanRouter;
