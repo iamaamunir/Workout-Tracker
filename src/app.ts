@@ -3,6 +3,7 @@ import authRouter from "../src/routes/authRoute";
 import exerciseRouter from "./routes/exerciseRoute";
 import { errorHandler } from "./middlewares/errorMiddleware";
 import workoutPlanRouter from "./routes/planRoute";
+import workoutRouter from "./routes/workoutRoute";
 
 const app = express();
 app.use(express.json());
@@ -16,6 +17,7 @@ app.get("/", (req, res) => {
 app.use("/api/v1", authRouter);
 app.use("/api/v1", exerciseRouter);
 app.use("/api/v1", workoutPlanRouter);
+app.use("/api/v1", workoutRouter);
 
 app.use(errorHandler as ErrorRequestHandler);
 

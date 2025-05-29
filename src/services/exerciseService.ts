@@ -38,7 +38,11 @@ export class exerciseService {
       const allExercises = await exerciseRepository.find();
       return allExercises;
     } catch (error) {
-      next(error);
+      if (!(error instanceof AppError)) {
+        console.error("Unexpected error during user registration:", error);
+        throw new AppError("Internal server error", 500, false, "error");
+      }
+      throw error;
     }
   }
 

@@ -42,7 +42,7 @@ export class WorkoutPlans {
     () => WorkoutExercise,
     (workoutExercise) => workoutExercise.workoutPlans
   )
-  workoutExercise?: Relation<WorkoutExercise[]>;
+  workoutExercise?: Relation<WorkoutExercise[]> | undefined;
 
   @CreateDateColumn()
   createdAt!: Date;

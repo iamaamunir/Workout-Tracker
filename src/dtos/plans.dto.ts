@@ -15,17 +15,17 @@ export const CreatePlanRequest = z.object({
 
 export type CreatePlanRequestDto = z.infer<typeof CreatePlanRequest>;
 
-export interface PlanResponseDto {
-  name: string;
-  description: string;
-  goal: string;
-  duration_in_weeks: number;
-  difficulty: string;
-  is_public: boolean;
-  createdAt: Date;
-  user: string;
-  workoutExercise: undefined;
-}
+// export interface PlanResponseDto {
+//   name: string;
+//   description: string;
+//   goal: string;
+//   duration_in_weeks: number;
+//   difficulty: string;
+//   is_public: boolean;
+//   createdAt: Date;
+//   user: string;
+//   workoutExercise: undefined;
+// }
 
 export const EditPlanRequest = z.object({
   name: z.string().optional(),
@@ -37,6 +37,7 @@ export const EditPlanRequest = z.object({
 });
 
 export interface PlanResponseDto {
+  id: string;
   name: string;
   description: string;
   goal: string;
@@ -45,7 +46,7 @@ export interface PlanResponseDto {
   is_public: boolean;
   createdAt: Date;
   user: string;
-  workoutExercise: undefined;
+  workoutExercise?: string[];
 }
 
 export type EditPlanRequestDto = z.infer<typeof EditPlanRequest>;
