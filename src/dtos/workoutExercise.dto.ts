@@ -26,3 +26,22 @@ export  interface WorkoutExerciseDto{
   exercise?: Exercise;
   workoutPlans?: WorkoutPlan;
 }
+
+export interface GetWorkoutExerciseDto {
+  id?: string;
+  sets: number;
+  reps: number;
+  duration: number;
+  notes?: string;
+  createdAt?: Date;
+  exerciseName: string;
+  exerciseCategory: string;
+  exerciseDifficulty: string;
+  media_url: string;
+  calorie_burned: number;
+  planDifficulty: string;
+  planName: string;
+  plan_duration_in_weeks: number;
+  
+
+}

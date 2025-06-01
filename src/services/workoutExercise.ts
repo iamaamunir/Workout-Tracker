@@ -1,6 +1,9 @@
 import { User } from "../entities/user";
 import { WorkoutExercise } from "../entities/workoutExercises";
-import { WorkoutExerciseDto } from "../dtos/workoutExercise.dto";
+import {
+  WorkoutExerciseDto,
+  GetWorkoutExerciseDto,
+} from "../dtos/workoutExercise.dto";
 import { AppDataSource } from "../data-source";
 import { WorkoutPlans } from "../entities/workoutPlans";
 import { Exercise } from "../entities/exercises";
@@ -62,6 +65,70 @@ export class WorkoutExerciseService {
         throw new AppError("Internal server error", 500, false, "error");
       }
       throw error;
+    }
+  }
+
+  static async getWorkoutExercise(
+    workoutId: string,
+    req: any
+  ): Promise<GetWorkoutExerciseDto | any> {
+    try {
+      const workoutRepo = AppDataSource.getRepository(WorkoutExercise);
+      const userRepository = AppDataSource.getRepository(User);
+      const planRepository = AppDataSource.getRepository(WorkoutPlans);
+      const exerciseRepository = AppDataSource.getRepository(Exercise);
+      const isAccount = await userRepository.findOneBy({ id: req.user.id });
+      if (!isAccount) {
+        throw new AppError(
+          "User cannot access this route",
+          401,
+          true,
+          "Unauthorized"
+        );
+      }
+      const workout = await workoutRepo.findOne({
+        where: { id: workoutId },
+        relations: ["workoutPlans", "exercise"],
+      });
+
+      if (!workout) {
+        throw new AppError("workout not available", 400, true, "Not found");
+      }
+      const plan = await planRepository.findOneBy({
+        id: workout.workoutPlans.id,
+      });
+
+      const exercise = await exerciseRepository.findOneBy({
+        id: workout.exercise.id,
+      });
+
+      const data = {
+        id: workout.id,
+        sets: workout.sets,
+        reps: workout.reps,
+        duration: workout.duration,
+        notes: workout.notes,
+        createdAt: workout.createdAt,
+        exercise: {
+          name: exercise?.name,
+          category: exercise?.category,
+          difficulty: exercise?.difficulty,
+          media_url: exercise?.media_url,
+          calorie_burned: exercise?.calorie_burned,
+        },
+        plan: {
+          difficulty: plan?.difficulty,
+          name: plan?.name,
+          duration_in_weeks: plan?.duration_in_weeks,
+        },
+      };
+      // console.log(data);
+      return data;
+    } catch (error) {
+      if (!(error instanceof AppError)) {
+        console.error("Unexpected error during user registration:", error);
+        throw new AppError("Internal server error", 500, false, "error");
+      }
     }
   }
 }

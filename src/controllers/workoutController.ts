@@ -13,9 +13,9 @@ export class WorkoutController {
       const data = req.body;
       const exerciseId = req.params.exerciseId;
       const planId = req.params.planId;
-      console.log(data);
+
       const validateData = WorkoutExerciseSchema.parse(data);
-      console.log(validateData);
+
       const createdWorkoutExercise =
         await WorkoutExerciseService.createWorkoutExercise(
           validateData,
@@ -32,6 +32,32 @@ export class WorkoutController {
       );
       response.send(res);
     } catch (error) {
+      next(error);
+    }
+  }
+  static async getWorkoutDetails(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ) {
+    try {
+      const workoutId = req.params.workoutId;
+      console.log(workoutId);
+      const workoutDetails = await WorkoutExerciseService.getWorkoutExercise(
+        workoutId,
+        req
+      );
+
+      const response = new ResponseHandler(
+        workoutDetails,
+        "Workout exercise details",
+        200,
+        null,
+        "success"
+      );
+      response.send(res);
+    } catch (error) {
+      console.log(error);
       next(error);
     }
   }
