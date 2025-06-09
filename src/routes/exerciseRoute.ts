@@ -7,7 +7,6 @@ import { adminMiddleware } from "../middlewares/adminMiddleware";
 exerciseRouter.get(
   "/exercises",
   authMiddleware,
-  adminMiddleware,
   exerciseController.getAllExercise
 );
 
