@@ -15,4 +15,16 @@ workoutRouter.get(
   WorkoutController.getWorkoutDetails
 );
 
+workoutRouter.get("/workouts", authMiddleware, WorkoutController.getWorkouts);
+workoutRouter.patch(
+  "/workout/:workoutId",
+  authMiddleware,
+  WorkoutController.updateWorkout
+);
+
+workoutRouter.delete(
+  "/workout/:workoutId",
+  authMiddleware,
+  WorkoutController.deleteWorkout
+);
 export default workoutRouter;

@@ -42,7 +42,6 @@ export class WorkoutController {
   ) {
     try {
       const workoutId = req.params.workoutId;
-      console.log(workoutId);
       const workoutDetails = await WorkoutExerciseService.getWorkoutExercise(
         workoutId,
         req
@@ -58,6 +57,60 @@ export class WorkoutController {
       response.send(res);
     } catch (error) {
       console.log(error);
+      next(error);
+    }
+  }
+  static async getWorkouts(req: Request, res: Response, next: NextFunction) {
+    try {
+      const workouts = await WorkoutExerciseService.getWorkouts(req);
+      const response = new ResponseHandler(
+        workouts,
+        "Workout exercise details",
+        200,
+        null,
+        "success"
+      );
+      response.send(res);
+    } catch (error) {
+      console.log(error);
+      next(error);
+    }
+  }
+  static async updateWorkout(req: Request, res: Response, next: NextFunction) {
+    try {
+      const workoutId = req.params.workoutId;
+      const payload = req.body;
+      const updatedWorkout = await WorkoutExerciseService.updateWorkout(
+        workoutId,
+        payload,
+        req
+      );
+      const response = new ResponseHandler(
+        updatedWorkout,
+        "Workout exercise details",
+        204,
+        null,
+        "success"
+      );
+      response.send(res);
+    } catch (error) {
+      console.log(error);
+      next(error);
+    }
+  }
+  static async deleteWorkout(req: Request, res: Response, next: NextFunction) {
+    try {
+      const workoutId = req.params.workoutId;
+      await WorkoutExerciseService.deleteWorkout(workoutId, req);
+      const response = new ResponseHandler(
+        null,
+        "Workout exercise details",
+        204,
+        null,
+        "success"
+      );
+      response.send(res);
+    } catch (error) {
       next(error);
     }
   }

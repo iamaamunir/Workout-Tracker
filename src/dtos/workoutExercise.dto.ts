@@ -13,9 +13,7 @@ export const WorkoutExerciseSchema = z.object({
   workoutPlans: z.string().optional(),
 });
 
-
-
-export  interface WorkoutExerciseDto{
+export interface WorkoutExerciseDto {
   id?: string;
   sets: number;
   reps: number;
@@ -42,6 +40,4 @@ export interface GetWorkoutExerciseDto {
   planDifficulty: string;
   planName: string;
   plan_duration_in_weeks: number;
-  
-
 }
